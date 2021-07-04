@@ -8,8 +8,7 @@ namespace RossetaStone.Controllers
     [Route("test")]
     public class TestController : Controller
     {
-        [HttpGet("admin")]
-        [Authorize(Roles = RoleNames.Administrator)]
+        
         public IActionResult Get()
         {
             return Ok("Cтраница администратора");
