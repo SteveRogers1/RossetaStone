@@ -56,11 +56,16 @@ button.accept-policy {
 html {
   position: relative;
   min-height: 100%;
+  box-sizing: border-box;
+}
+*, *::before, *::after{
+    box-sizing: inherit;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color: #F5ECEC;
 }
 .footer {
   position: absolute;
@@ -69,3 +74,51 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.wrapper {
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.form-item01 {
+    width: 400px;
+    height: 34px;
+    background: #FFFFFF;
+    border: 0.5px solid #C4C4C4;
+    border-radius: 50px;
+    margin: 0 9px 0 0;
+}
+
+.form-item02 {
+    width: 111px;
+    height: 34px;
+    background: #FFFFFF;
+    border: 0.5px solid #C4C4C4;
+    border-radius: 50px;
+    margin: 0 9px 0 0;
+}
+
+.form-item03 {
+    width: 171px;
+    height: 34px;
+    background: #4DAAB7;
+    border-radius: 50px;
+}
+
+.form-item04 {
+    width: 400px;
+    height: 297px;
+    margin: 0 20px 0 0;
+}
+
+.form-item05 {
+    width: 400px;
+    height: 297px;
+}
+
+.form-box01 {
+    margin: 48px 0 0 0;
+}
+
+
+
