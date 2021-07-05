@@ -65,7 +65,7 @@ namespace RossetaStone
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Dictionaries}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
