@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RossetaStone.Data;
 using RossetaStone.Models;
-
+using static RossetaStone.Helper;
 
 namespace RossetaStone.Controllers
 {
-
     public class DictionariesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,113 +23,66 @@ namespace RossetaStone.Controllers
             return View(await _context.Dictionary.ToListAsync());
         }
 
-        // GET: Dictionaries/Details/5
-        public async Task<IActionResult> Details(int? id)
+
+        // GET: Transaction/AddOrEdit(Insert)
+        // GET: Transaction/AddOrEdit/5(Update)
+        [NoDirectAccess]
+        public async Task<IActionResult> AddOrEdit(int id = 0)
         {
-            if (id == null)
+            if (id == 0)
+                return View(new Dictionary());
+            else
             {
-                return NotFound();
-            }
-
-            var dictionary = await _context.Dictionary
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (dictionary == null)
-            {
-                return NotFound();
-            }
-
-            return View(dictionary);
-        }
-
-        // GET: Dictionaries/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Dictionaries/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,WordEng,WordRus")] Dictionary dictionary)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(dictionary);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(dictionary);
-        }
-
-        // GET: Dictionaries/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var dictionary = await _context.Dictionary.FindAsync(id);
-            if (dictionary == null)
-            {
-                return NotFound();
-            }
-            return View(dictionary);
-        }
-
-        // POST: Dictionaries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,WordEng,WordRus")] Dictionary dictionary)
-        {
-            if (id != dictionary.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                var dictionaryModel = await _context.Dictionary.FindAsync(id);
+                if (dictionaryModel == null)
                 {
-                    _context.Update(dictionary);
+                    return NotFound();
+                }
+                return View(dictionaryModel);
+            }
+        }
+
+
+        // POST: Dictionaries/AddOrEdit
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOrEdit(int id, [Bind("Id,WordEng,WordRus")] Dictionary dictionary)
+        {
+            
+
+            if (ModelState.IsValid)
+            {//Insert
+                if (id == 0)
+                {
+                    _context.Add(dictionary);
                     await _context.SaveChangesAsync();
+
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!DictionaryExists(dictionary.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(dictionary);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!DictionaryExists(dictionary.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(dictionary);
-        }
 
-        // GET: Dictionaries/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAll", _context.Dictionary.ToList()) });
             }
-
-            var dictionary = await _context.Dictionary
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (dictionary == null)
-            {
-                return NotFound();
-            }
-
-            return View(dictionary);
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", dictionary) });
         }
 
         // POST: Dictionaries/Delete/5
@@ -144,7 +93,7 @@ namespace RossetaStone.Controllers
             var dictionary = await _context.Dictionary.FindAsync(id);
             _context.Dictionary.Remove(dictionary);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Json(new { html = Helper.RenderRazorViewToString(this, "_ViewAll", _context.Dictionary.ToList()) });
         }
 
         private bool DictionaryExists(int id)
