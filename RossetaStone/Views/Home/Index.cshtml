@@ -1,26 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<div class="wrapper">
-    <div class="d-flex flex-row form-box01">
 
-        <input class="form-control form-item01" type="text" placeholder="Введите слово">
 
-        <select class="form-control form-item02">
-            <option>Англ</option>
-            <option>Рус</option>
-        </select>
+<input type="text" id="txtDictionaryId" placeholder="Dictionary Id" style="display: none;"/>
+<input type="text" id="txtWordEng" placeholder="Word Eng" style="margin-right: 5px;" />
+<input type="text" id="txtWordRus" placeholder="Word Rus" style="margin-right: 5px;" />
 
-        <select class="form-control form-item02">
-            <option>Рус</option>
-            <option>Англ</option>
-        </select>
+<button id="btnSave" class="btn btn-success" style="margin-right: 5px;">Save</button>
+<button id="btnAddNew" class="btn btn-primary" style="margin-right: 5px;">Add New</button>
 
-        <button type="submit" class="form-item03">Поиск</button>
+<br />
+<br />
 
-    </div>
-    <div class="d-flex flex-row form-box01">
-        <input class="form-control form-item04" type="text">
-        <input class="form-control form-item05" type="text">
-    </div>
-</div>
+<table id="tblDictionaries" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Word Eng</th>
+            <th>Word Rus</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>

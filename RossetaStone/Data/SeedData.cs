@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using RossetaStone.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace RossetaStone.Data
         public static async Task EnsureSeedData(IServiceProvider provider)
         {
             var roleMgr = provider.GetRequiredService<RoleManager<IdentityRole>>();
-            foreach (var roleName in RoleNames.AllRoles)
+            foreach (var roleName in Role.AllRoles)
             {
                 var role = roleMgr.FindByNameAsync(roleName).Result;
 
@@ -34,25 +35,10 @@ namespace RossetaStone.Data
                 var adminUser = await userMgr.FindByEmailAsync(DefaultUsers.Administrator.Email);
                 var commonUser = await userMgr.FindByEmailAsync(DefaultUsers.User.Email);
 
-                await userMgr.AddToRoleAsync(adminUser, RoleNames.Administrator);
-                await userMgr.AddToRoleAsync(commonUser, RoleNames.User);
+                await userMgr.AddToRoleAsync(adminUser, Role.Administrator);
+                await userMgr.AddToRoleAsync(commonUser, Role.User);
             }
         }
-    }
-    public static class RoleNames
-    {
-        public const string Administrator = "Admin";
-        public const string User = "User";
-
-        public static IEnumerable<string> AllRoles
-        {
-            get
-            {
-                yield return Administrator;
-                yield return User;
-            }
-        }
-
     }
 
     public static class DefaultUsers
