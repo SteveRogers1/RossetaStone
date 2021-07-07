@@ -33,20 +33,20 @@ namespace RossetaStone.Controllers
         public Dictionary Get(int id)
         {
             return _dictionaryService.GetById(id);
-        }
+                }
 
         // POST api/<DictionariesController>
         [HttpPost]
         public void SaveOrUpdate([FromForm] Dictionary dictionary)
-        {
+                    {
             if (dictionary.DictionaryId == 0) 
-            { 
+                        {
                 _dictionaryService.Save(dictionary); 
-            }
-            else
-            {
+                        }
+                        else
+                        {
                 _dictionaryService.Update(dictionary);
-            }
+        }
         }
 
         // DELETE api/ApiWithActions/5
