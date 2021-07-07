@@ -1,104 +1,59 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RossetaStone.Data;
+using RossetaStone.IService;
 using RossetaStone.Models;
-using static RossetaStone.Helper;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace RossetaStone.Controllers
 {
-    public class DictionariesController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DictionariesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        IDictionaryService _dictionaryService = null;
 
-        public DictionariesController(ApplicationDbContext context)
+        public DictionariesController(IDictionaryService dictionaryService)
         {
-            _context = context;
-        }
-        // GET: Dictionaries
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Dictionary.ToListAsync());
+            _dictionaryService = dictionaryService;
         }
 
-
-        // GET: Transaction/AddOrEdit(Insert)
-        // GET: Transaction/AddOrEdit/5(Update)
-        [NoDirectAccess]
-        public async Task<IActionResult> AddOrEdit(int id = 0)
+        // GET: api/<DictionariesController>
+        [HttpGet]
+        public IEnumerable<Dictionary> GetDictionaries()
         {
-            if (id == 0)
-                return View(new Dictionary());
+            return _dictionaryService.GetDictionaries();
+        }
+
+        // GET api/<DictionariesController>/5
+        [HttpGet("{id}", Name = "Get")]
+        public Dictionary Get(int id)
+        {
+            return _dictionaryService.GetById(id);
+        }
+
+        // POST api/<DictionariesController>
+        [HttpPost]
+        public void SaveOrUpdate([FromForm] Dictionary dictionary)
+        {
+            if (dictionary.DictionaryId == 0) 
+            { 
+                _dictionaryService.Save(dictionary); 
+            }
             else
             {
-                var dictionaryModel = await _context.Dictionary.FindAsync(id);
-                if (dictionaryModel == null)
-                {
-                    return NotFound();
-                }
-                return View(dictionaryModel);
+                _dictionaryService.Update(dictionary);
             }
         }
 
-
-        // POST: Dictionaries/AddOrEdit
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(int id, [Bind("Id,WordEng,WordRus")] Dictionary dictionary)
+        // DELETE api/ApiWithActions/5
+        [HttpDelete("{id}")]
+        public string Delete(int id)
         {
-            
-
-            if (ModelState.IsValid)
-            {//Insert
-                if (id == 0)
-                {
-                    _context.Add(dictionary);
-                    await _context.SaveChangesAsync();
-
-                }
-                else
-                {
-                    try
-                    {
-                        _context.Update(dictionary);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!DictionaryExists(dictionary.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-
-                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAll", _context.Dictionary.ToList()) });
-            }
-            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "AddOrEdit", dictionary) });
-        }
-
-        // POST: Dictionaries/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var dictionary = await _context.Dictionary.FindAsync(id);
-            _context.Dictionary.Remove(dictionary);
-            await _context.SaveChangesAsync();
-            return Json(new { html = Helper.RenderRazorViewToString(this, "_ViewAll", _context.Dictionary.ToList()) });
-        }
-
-        private bool DictionaryExists(int id)
-        {
-            return _context.Dictionary.Any(e => e.Id == id);
+            return _dictionaryService.Delete(id);
         }
     }
 }

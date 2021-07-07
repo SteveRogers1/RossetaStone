@@ -99,22 +99,19 @@ body {
 }
 
 .form-item03 {
-    width: 171px;
+    width: 150px;
     height: 34px;
     background: #4DAAB7;
     border-radius: 50px;
 }
 
 .form-item04 {
-    width: 400px;
-    height: 297px;
+    width: 850px;
+    min-height: 297px;
     margin: 0 20px 0 0;
+    padding:20px;
 }
 
-.form-item05 {
-    width: 400px;
-    height: 297px;
-}
 
 .form-box01 {
     margin: 48px 0 0 0;

@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RossetaStone.Data;
+using RossetaStone.IService;
+using RossetaStone.Service;
+using System;
 
 namespace RossetaStone
 {
@@ -22,7 +25,10 @@ namespace RossetaStone
         public void ConfigureServices(IServiceCollection services)
         {
             string dbConnectionString = Configuration.GetConnectionString("DefaultConnection");
-            IServiceCollection serviceCollection = services.AddDbContext<ApplicationDbContext>(opt => opt.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));
+            IServiceCollection serviceCollection = services.AddDbContext<ApplicationDbContext>(opt => opt.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString), builder =>
+            {
+                builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+            }));
             services.AddDefaultIdentity<IdentityUser>(
                 opt =>
                 {
@@ -37,6 +43,15 @@ namespace RossetaStone
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddScoped<IDictionaryService, DictionaryService>();
+            services.AddControllersWithViews()
+                .AddJsonOptions(o =>
+                {
+                    o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                    o.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

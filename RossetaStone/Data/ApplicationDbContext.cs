@@ -13,6 +13,6 @@ namespace RossetaStone.Data
             : base(options)
         {
         }
-        public DbSet<Dictionary> Dictionary { get; set; }
+        public DbSet<Dictionary> Dictionaries { get; set; }
     }
 }
