@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - RossetaStone</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -17,12 +18,9 @@
 
     <footer class="border-top footer text-muted">
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js"></script>
-    <script src="~/js/dictionaryDatatable.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

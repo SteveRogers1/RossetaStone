@@ -1,27 +1,103 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole(Role.Administrator.ToString()))
+    {
+        <br />
+        <br />
+
+        <div class="wrapper">
+
+            <input type="text" id="txtDictionaryId" placeholder="Dictionary Id" style="display: none;" />
+            <input type="text" id="txtWordEng" placeholder="Word Eng" style="margin-right: 5px;" />
+            <input type="text" id="txtWordRus" placeholder="Word Rus" style="margin-right: 5px;" />
+
+            <button id="btnSave" class="btn btn-success" style="margin-right: 5px;">Save</button>
+            <button id="btnAddNew" class="btn btn-primary" style="margin-right: 5px;">Add New</button>
 
 
-<input type="text" id="txtDictionaryId" placeholder="Dictionary Id" style="display: none;"/>
-<input type="text" id="txtWordEng" placeholder="Word Eng" style="margin-right: 5px;" />
-<input type="text" id="txtWordRus" placeholder="Word Rus" style="margin-right: 5px;" />
+            <div class="d-flex flex-row form-box01">
+                <div id="tblDictionaries_filter" class="dataTables_filter">
+                    <input class="form-control form-control-sm form-item01" type="search" placeholder="Введите слово" aria-controls="tblDictionaries">
+                </div>
 
-<button id="btnSave" class="btn btn-success" style="margin-right: 5px;">Save</button>
-<button id="btnAddNew" class="btn btn-primary" style="margin-right: 5px;">Add New</button>
+                <select class="form-control form-item02">
+                    <option>Англ</option>
+                </select>
 
-<br />
-<br />
+                <select class="form-control form-item02">
+                    <option>Рус</option>
+                </select>
 
-<table id="tblDictionaries" class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>Word Eng</th>
-            <th>Word Rus</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+                <button type="submit" class="form-item03">Поиск</button>
 
-    </tbody>
-</table>
+            </div>
+            <div class="d-flex flex-row form-box01">
+                <div class="form-item04 bg-white" type="text">
+                    <table id="tblDictionaries" class="cell-border compact stripe">
+                        <thead>
+                            <tr>
+                                <th>Word Eng</th>
+                                <th>Word Rus</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/js/dictionaryAdminDatatable.js"></script>
+    }
+}
+else
+{
+    <div class="wrapper">
+
+        <div class="d-flex flex-row form-box01">
+            <div id="tblDictionaries_filter" class="dataTables_filter">
+                <input class="form-control form-control-sm form-item01" type="search" placeholder="Введите слово" aria-controls="tblDictionaries">
+            </div>
+
+            <select class="form-control form-item02">
+                <option>Англ</option>
+            </select>
+
+            <select class="form-control form-item02">
+                <option>Рус</option>
+            </select>
+
+            <button type="submit" class="form-item03">Поиск</button>
+
+        </div>
+        <div class="d-flex flex-row form-box01">
+            <div class="form-item04 bg-white" type="text">
+                <table id="tblDictionaries" class="cell-border compact stripe">
+                    <thead>
+                        <tr>
+                            <th>Word Eng</th>
+                            <th>Word Rus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/dictionaryUserDatatable.js"></script>
+
+}
