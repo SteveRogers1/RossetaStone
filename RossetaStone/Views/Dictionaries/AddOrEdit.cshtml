@@ -1,0 +1,33 @@
+﻿@model RossetaStone.Models.Dictionary
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row">
+    <div class="col-md-12" >
+        <form asp-action="AddOrEdit" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="WordEng" class="control-label"></label>
+                <input asp-for="WordEng" class="form-control" />
+                <span asp-validation-for="WordEng" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WordRus" class="control-label"></label>
+                <input asp-for="WordRus" class="form-control" />
+                <span asp-validation-for="WordRus" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

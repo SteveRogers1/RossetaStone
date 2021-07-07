@@ -1,0 +1,9 @@
+﻿@model IEnumerable<RossetaStone.Models.Dictionary>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div id="view-all">
+    @await Html.PartialAsync("_ViewAll", Model)
+</div>
